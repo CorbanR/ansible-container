@@ -1,0 +1,7 @@
+galaxy_info:
+  author: Corban Raun
+  description: Official base image for Instructure
+  company: Instructure
+
+  min_ansible_container_version: 0.2.0
+  tags: []
