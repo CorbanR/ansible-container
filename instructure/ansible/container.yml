@@ -27,7 +27,7 @@ services:
     working_dir: "{{ WORKING_DIR }}"
     environment:
       BUNDLE_APP_CONFIG: "/home/docker/.bundle"
-      GEM_HOME: "/home/docker/.gem/ruby/2.1.0"
+      GEM_HOME: "/home/docker/.gem/ruby/2.2.0"
       PATH: '$GEM_HOME/bin:$PATH'
 
   ruby2.3:
@@ -36,7 +36,7 @@ services:
     working_dir: "{{ WORKING_DIR }}"
     environment:
       BUNDLE_APP_CONFIG: "/home/docker/.bundle"
-      GEM_HOME: "/home/docker/.gem/ruby/2.1.0"
+      GEM_HOME: "/home/docker/.gem/ruby/2.3.0"
       PATH: '$GEM_HOME/bin:$PATH'
 
 registries: {}

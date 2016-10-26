@@ -26,7 +26,7 @@
 - hosts: ruby2.3
   gather_facts: false
   vars:
-    ruby_version: 2.2
+    ruby_version: 2.3
     bundler_version: 1.13.5
   roles:
     - ruby
