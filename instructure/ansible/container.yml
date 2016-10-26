@@ -1,10 +1,42 @@
 version: "1"
+
+defaults:
+  CONTAINER_USER: docker
+  WORKING_DIR: /usr/src/app
+
 services:
   core:
-    image: "ubuntu:trusty"
-    user: "docker"
+    image: "ubuntu:xenial"
+    user: "{{ CONTAINER_USER }}"
     environment:
       LANG: "en_US.UTF-8"
       LC_ALL: "en_US.UTF-8"
+
+  ruby2.1:
+    image: "instructure-core:latest"
+    user: "{{ CONTAINER_USER }}"
+    working_dir: "{{ WORKING_DIR }}"
+    environment:
+      BUNDLE_APP_CONFIG: "/home/docker/.bundle"
+      GEM_HOME: "/home/docker/.gem/ruby/2.1.0"
+      PATH: '$GEM_HOME/bin:$PATH'
+
+  ruby2.2:
+    image: "instructure-core:latest"
+    user: "{{ CONTAINER_USER }}"
+    working_dir: "{{ WORKING_DIR }}"
+    environment:
+      BUNDLE_APP_CONFIG: "/home/docker/.bundle"
+      GEM_HOME: "/home/docker/.gem/ruby/2.1.0"
+      PATH: '$GEM_HOME/bin:$PATH'
+
+  ruby2.3:
+    image: "instructure-core:latest"
+    user: "{{ CONTAINER_USER }}"
+    working_dir: "{{ WORKING_DIR }}"
+    environment:
+      BUNDLE_APP_CONFIG: "/home/docker/.bundle"
+      GEM_HOME: "/home/docker/.gem/ruby/2.1.0"
+      PATH: '$GEM_HOME/bin:$PATH'
 
 registries: {}

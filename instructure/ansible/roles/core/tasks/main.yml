@@ -1,15 +1,15 @@
 ---
-- name: Create docker group
+- name: Create {{ container_group }}
   group:
-    name: docker
+    name: "{{ container_group }}"
     gid: 9999
 
-- name: Create docker user
+- name: Create {{ container_user }}
   user:
-    name: docker
-    comment: "Docker User"
+    name: "{{ container_user }}"
+    comment: "{{ container_user | capitalize() }} User"
     uid: 9999
-    group: docker
+    group: "{{ container_group }}"
 
 - name: Install packages
   apt:
@@ -26,7 +26,6 @@
     - language-pack-en
     - locales
     - psmisc
-    - python
     - software-properties-common
 
 - name: Create sensu monitor directory
@@ -44,4 +43,4 @@
   shell: "locale-gen en_US.UTF-8 && dpkg-reconfigure locales"
 
 - name: Cleanup task
-  shell: "apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/"
+  shell: "apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/"

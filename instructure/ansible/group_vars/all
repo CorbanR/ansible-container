@@ -1,0 +1,5 @@
+---
+container_user: docker
+container_group: docker
+
+ansible_distribution_release: xenial

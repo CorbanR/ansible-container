@@ -1,0 +1,104 @@
+---
+- name: Create app folder
+  file:
+    path: /usr/src/app
+    owner: "{{ container_user }}"
+    group: "{{ container_group }}"
+    recurse: yes
+    state: directory
+
+- name: Install apt-transport-https and software-properties-common so the apt_repository module will work properly
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - apt-transport-https
+    - software-properties-common
+
+- name: Add the brightbox repository signing key
+  apt_key:
+    id: "C3173AA6"
+    data: "{{ item }}"
+  with_file: brightbox-key.gpg.pub
+
+- name: Add the brightbox repository
+  apt_repository:
+    repo: "deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu/ {{ ansible_distribution_release }} main"
+    mode: "0644"
+
+- name: Install ruby
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - "ruby{{ ruby_version }}"
+    - "ruby{{ ruby_version }}-dev"
+
+- name: Install additional packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - imagemagick
+    - libbz2-dev
+    - libcurl4-openssl-dev
+    - libevent-dev
+    - libffi-dev
+    - libglib2.0-dev
+    - libjpeg-dev
+    - libmagickcore-dev
+    - libmagickwand-dev
+    - libmysqlclient-dev
+    - libncurses-dev
+    - libpq-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - libssl-dev
+    - libxml2-dev
+    - libxslt-dev
+    - libyaml-dev
+    - make
+    - zlib1g-dev
+
+
+- name: Copy over policy.xml to mitigate imagetragick
+  copy:
+    src: imagetragick.policy.xml
+    dest: /etc/ImageMagick-6/policy.xml
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Install Bundler
+  command: "gem install -i /var/lib/gems/{{ ruby_version }}.0 bundler -v {{ bundler_version }}"
+
+- name: Copy over gemrc file
+  copy:
+    src: gemrc
+    dest: "/home/{{ container_user }}/.gemrc"
+    owner: "{{ container_user }}"
+    group: "{{ container_group }}"
+    mode: "0644"
+
+- name: Ensure additional directories exist.
+  file:
+    path: "/home/docker/.gem/ruby/{{ ruby_version }}.0/{{ item }}"
+    owner: "{{ container_user }}"
+    group: "{{ container_group }}"
+    mode: "0755"
+    state: directory
+  with_items:
+    - "build_info"
+    - "cache"
+    - "doc"
+    - "extensions"
+    - "gems"
+    - "specifications"
+
+- name: Remove the brightbox repository
+  apt_repository:
+    repo: "deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu/ {{ ansible_distribution_release }} main"
+    mode: "0644"
+    state: absent
+
+- name: Apt cleanup
+  shell: "apt clean && rm -rf /var/lib/apt/lists/*"

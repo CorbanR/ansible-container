@@ -3,6 +3,31 @@
   gather_facts: false
   pre_tasks:
     - name: 'Bootstrap python'
-      raw: sudo apt-get update && apt-get -y install python
+      raw: apt update && apt -y install python-minimal sudo
   roles:
     - core
+
+- hosts: ruby2.1
+  gather_facts: false
+  vars:
+    ruby_version: 2.1
+    bundler_version: 1.13.5
+  roles:
+    - ruby
+
+- hosts: ruby2.2
+  gather_facts: false
+  vars:
+    ruby_version: 2.2
+    bundler_version: 1.13.5
+  roles:
+    - ruby
+
+- hosts: ruby2.3
+  gather_facts: false
+  vars:
+    ruby_version: 2.2
+    bundler_version: 1.13.5
+  roles:
+    - ruby
+
